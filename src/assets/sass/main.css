@@ -80,6 +80,7 @@ header h1 strong {
   -webkit-box-pack: end;
       -ms-flex-pack: end;
           justify-content: flex-end;
+  padding-bottom: 10px;
 }
 
 .content-wrap main .main-head .search-box {
@@ -92,6 +93,7 @@ header h1 strong {
   -webkit-box-flex: 1;
       -ms-flex: 1 1 0%;
           flex: 1 1 0%;
+  align: center;
 }
 
 .content-wrap main .main-head .search-box input {
