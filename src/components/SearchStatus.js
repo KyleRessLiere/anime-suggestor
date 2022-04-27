@@ -11,7 +11,7 @@ function SearchStatus(props) {
             <a href={props.randomAnime.url} target="_blank">
               <img src={props.randomAnime.images.jpg.image_url} alt="Anime" />
             </a>
-            <p>{props.randomAnime.synopsis}</p>
+            <p className="anime-synopsis">{props.randomAnime.synopsis}</p>
             <br />
           </div>
         );
@@ -25,8 +25,8 @@ function SearchStatus(props) {
             <a href={props.randomAnime.url} target="_blank">
               <img src={props.randomAnime.images.jpg.image_url} alt="Anime" />
             </a>
-
-            <p>{props.randomAnime.synopsis}</p>
+            <h2>Description</h2>
+            <p className="anime-synopsis">{props.randomAnime.synopsis}</p>
             <br />
             <iframe
               title="Campus Tour"
@@ -40,7 +40,7 @@ function SearchStatus(props) {
     } catch (e) {
       <div className="anime-card">
         <h1>{props.randomAnime.title}</h1>
-        <p>{props.randomAnime.synopsis}</p>
+        <p className="anime-synopsis">{props.randomAnime.synopsis}</p>
         <br />
       </div>;
     }

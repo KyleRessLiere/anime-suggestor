@@ -1,4 +1,4 @@
-@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css?family=Red+Hat+Display:900&display=swap");
 * {
   margin: 0;
   padding: 0;
@@ -8,7 +8,7 @@
 }
 
 html {
-  background-color: #5EB1BF;
+  background-color: #313131;
 }
 
 header {
@@ -24,31 +24,22 @@ header h1 {
 }
 
 header h1 strong {
-  color: #313131;
-}
-
-.anime-card {
-  padding-right: 5%;
-  padding: left 5%;
-  border-radius: 12px;
-  padding-top: 2%;
-  text-align: center;
-  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  color: #4583C9;
 }
 
 .inner-main {
   background-color: #282A36;
-  border-radius: 12px;
+  padding-right: 15%;
+  padding-left: 15%;
   /* Center horizontally*/
 }
 
 .main {
   color: white;
   text-align: center;
-  height: 85%;
-  width: 90%;
-  margin: 0 auto;
-  padding: 5px;
+  height: 100%;
+  width: 100%;
+  font-family: 'Fira Sans', sans-serif;
 }
 
 .btn-right {
@@ -59,12 +50,16 @@ header h1 strong {
   float: left;
 }
 
+.anime-synopsis {
+  font-size: 20px;
+  font-family: 'Old Standard TT', serif;
+}
+
 /* From uiverse.io by @NorthFishHasNa */
 button {
   color: white;
   display: inline-block;
-  border-radius: 4px;
-  background-color: #282A36;
+  background-color: #4583C9;
   text-align: center;
   font-size: 17px;
   padding: 16px;
@@ -73,33 +68,6 @@ button {
   transition: all 0.5s;
   cursor: pointer;
   margin: 5px;
-}
-
-button span {
-  cursor: pointer;
-  display: inline-block;
-  position: relative;
-  -webkit-transition: 0.5s;
-  transition: 0.5s;
-}
-
-button span:after {
-  content: '»';
-  position: absolute;
-  opacity: 0;
-  top: 0;
-  right: -15px;
-  -webkit-transition: 0.5s;
-  transition: 0.5s;
-}
-
-button:hover span {
-  padding-right: 15px;
-}
-
-button:hover span:after {
-  opacity: 1;
-  right: 0;
 }
 
 .search-box {

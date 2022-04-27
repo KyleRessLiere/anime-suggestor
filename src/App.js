@@ -89,19 +89,23 @@ function App() {
     const tempPage = await fetch(
       `https://api.jikan.moe/v4/top/anime?page=${randomPageNum}`
     ).then((res) => res.json());
-    try {
-      const temp = await fetch(
-        `https://api.jikan.moe/v4/users/${query}/animelist`
-      ).then((res) => res.json());
+    if (query.length > 0) {
+      try {
+        const temp = await fetch(
+          `https://api.jikan.moe/v4/users/${query}/animelist`
+        ).then((res) => res.json());
 
-      SetUserList(temp.data);
-      delay(1000);
+        SetUserList(temp.data);
+        delay(1000);
 
-      GenerateAnime(temp.data, tempPage.data);
-    } catch (e) {
-      //catches if invalid username
+        GenerateAnime(temp.data, tempPage.data);
+      } catch (e) {
+        //catches if invalid username
+        GenerateAnime([], tempPage.data);
+        //TODO:Add rendering for invalid user
+      }
+    } else {
       GenerateAnime([], tempPage.data);
-      //TODO:Add rendering for invalid user
     }
   }; //FetchUser
 
@@ -167,6 +171,7 @@ function App() {
     SetCurrentAnimeIndex(currentAnimeIndex + 1);
     //stores generated anime
     SetUnseenAnimeList((unseenIdAnimeList) => [...unseenIdAnimeList, anime]);
+    console.log(anime);
     setRandomAnime(anime);
 
     console.log(currentAnimeIndex);
