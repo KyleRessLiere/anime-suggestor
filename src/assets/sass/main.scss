@@ -34,20 +34,73 @@ header {
 }
 
 	.inner-main{
-	height: 85%;
-	width: 90%;
+	
   background-color: #282A36;
   border-radius: 12px;
   /* Center horizontally*/
-  margin: 0 auto;
+ 
 	}
 	.main{
-		text-align: center;
-		
-		
 		color: white;
+		text-align: center;
+		height: 85%;
+		width: 90%;
+		margin: 0 auto;
+		
+		padding: 5px;
 		
 	}
+.btn-right{
+
+	float: right;
+}
+.btn-left{
+	
+	float: left;
+}
+/* From uiverse.io by @NorthFishHasNa */
+button {
+	color: white;
+	display: inline-block;
+	border-radius: 4px;
+	background-color: #282A36;
+	
+	
+	text-align: center;
+	font-size: 17px;
+	padding: 16px;
+	width: 130px;
+	transition: all 0.5s;
+	cursor: pointer;
+	margin: 5px;
+   }
+   
+   button span {
+	cursor: pointer;
+	display: inline-block;
+	position: relative;
+	transition: 0.5s;
+   }
+   
+   button span:after {
+	content: '»';
+	position: absolute;
+	opacity: 0;
+	top: 0;
+	right: -15px;
+	transition: 0.5s;
+   }
+   
+   button:hover span {
+	padding-right: 15px;
+   }
+   
+   button:hover span:after {
+	opacity: 1;
+	right: 0;
+   }
+
+
 	.search-box{
 		width: 357px;
   		margin: 4px auto;

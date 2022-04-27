@@ -1,160 +1,194 @@
-
-import Header from './components/Header'
-import Sidebar from './components/Sidebar'
-import MainContent from './components/MainContent';
-import {useState,useEffect} from 'react' 
-import * as React from 'react';
-import ReactDOM from 'react-dom';
-import Card from '@mui/material/Card';
-import Button from '@mui/material/Button';
-import { CardContent } from '@mui/material';
-
+import Header from "./components/Header";
+import Sidebar from "./components/Sidebar";
+import MainContent from "./components/MainContent";
+import { useState, useEffect } from "react";
+import * as React from "react";
 
 function App() {
-	const [animeList, SetAnimeList] = useState([]);
-	const [topAnime, SetTopAnime] = useState([]);
-	const [user, SetUser] = useState("");
-	const [userList,SetUserList] = useState([])
-	const [randomAnime,setRandomAnime] = useState([]);
-	const [randomPage,SetRandomPage]  = useState([]);
-	const [isSearching,SetSearchStatus] = useState(false);
-	const [unseenAnimeList,SetUnseenAnimeList] = useState([]);
-	//TODO:add list of ids to make sure not repeating anime
+  const [animeList, SetAnimeList] = useState([]);
+  const [topAnime, SetTopAnime] = useState([]);
+  const [user, SetUser] = useState("");
+  const [userList, SetUserList] = useState([]);
+  const [randomAnime, setRandomAnime] = useState([]);
+  const [isSearching, SetSearchStatus] = useState(false);
+  const [unseenAnimeIdList, SetUnseenAnimeIdList] = useState([]);
+  const [unseenAnimeList, SetUnseenAnimeList] = useState([]);
+  const [currentAnimeIndex, SetCurrentAnimeIndex] = useState(-1);
+  const [currentPage, SetCurrentPage] = useState([]);
 
+  //Handlers
 
+  //handles going to next page
+  const HandlePrevPage = () => {
+    let lastPageIndex = currentAnimeIndex - 1;
+    if (lastPageIndex > -1) {
+      console.log(unseenAnimeList[lastPageIndex]);
+      setRandomAnime(unseenAnimeList[lastPageIndex]);
+      SetCurrentAnimeIndex(lastPageIndex);
+    }
+    //if there are any prev anime
+  };
+  //handles going to next page
+  const HandleNextPage = () => {
+    //if there are any prev anime
+    let nextAnimeIndex = currentAnimeIndex + 1;
+    if (nextAnimeIndex < unseenAnimeList.length) {
+      setRandomAnime(unseenAnimeList[nextAnimeIndex]);
+      SetCurrentAnimeIndex(nextAnimeIndex);
+    } else {
+      HandleSearch();
+    }
+  };
 
-	//fetches top anime on first page bypopularity
-	const GetTopAnime = async () => {
-		const temp = await fetch("https://api.jikan.moe/v4/top/anime")
+  //TODO: if no user dont search
+  const HandleSearch = async (e) => {
+    if (e !== undefined) {
+      //STOPS PAGE FROM REFRESHING
+      e.preventDefault();
+    }
 
-		//take the top anime and turns response to json
-		.then(res => res.json());
+    SetSearchStatus(true);
+    // FetchPage();
+    // delay(100);
+    FetchUser(user);
+  }; //HandleSearch
 
-		//grabs top 5 anime
-		SetTopAnime(temp.data.slice(0,5));
-	}
+  useEffect(() => {
+    FetchTopAnime();
+  }, []);
 
-	const HandleSearch = e => {
-		//STOPS PAGE FROM REFRESHING
-		e.preventDefault();
+  //fetches top anime on first page bypopularity
+  const FetchTopAnime = async () => {
+    const temp = await fetch("https://api.jikan.moe/v4/top/anime")
+      //take the top anime and turns response to json
+      .then((res) => res.json());
 
-		SetSearchStatus(true);
+    //grabs top 5 anime
+    SetTopAnime(temp.data.slice(0, 5));
+  }; //getTopAnime
+  const FetchAnimeById = async function (animeId) {
+    const temp = await fetch(`https://api.jikan.moe/v4/anime/${animeId}`).then(
+      (res) => res.json()
+    );
 
-		FetchUser(user);	
+    setRandomAnime(temp.data);
+  };
+  //TODO:ADJUST FETCHING
+  //TODO:FETCH PAGE SEPARATELY
+  const FetchPage = async function () {
+    let randomPageNum = Math.floor(Math.random() * 130) + 1;
+    const page = await fetch(
+      `https://api.jikan.moe/v4/top/anime?page=${randomPageNum}`
+    ).then(CheckError);
 
-	}//HandleSearch
+    console.log(page.data);
+    SetCurrentPage(page.data);
+  };
+  const FetchUser = async (query) => {
+    let randomPageNum = Math.floor(Math.random() * 130) + 1;
+    const tempPage = await fetch(
+      `https://api.jikan.moe/v4/top/anime?page=${randomPageNum}`
+    ).then((res) => res.json());
+    try {
+      const temp = await fetch(
+        `https://api.jikan.moe/v4/users/${query}/animelist`
+      ).then((res) => res.json());
 
-	useEffect(() =>{
-		GetTopAnime();
-	},[])
+      SetUserList(temp.data);
+      delay(1000);
 
-	function handleErrors(response) {
-		if (!response.ok) {
-			throw Error(response.statusText);
-		}
-		return response;
-	}
+      GenerateAnime(temp.data, tempPage.data);
+    } catch (e) {
+      //catches if invalid username
+      GenerateAnime([], tempPage.data);
+      //TODO:Add rendering for invalid user
+    }
+  }; //FetchUser
 
-	//TODO:HANDLE NO USER CASE
-	const FetchUser = async (query) => {
-		let randomPageNum = Math.floor(Math.random() * 130) + 1;
+  function delay(time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+  }
+  function CheckError(response) {
+    if (response.status >= 200 && response.status <= 299) {
+      return response.json();
+    } else {
+      throw Error(response.statusText);
+    }
+  }
 
-		
-		const tempPage = await fetch(`https://api.jikan.moe/v4/top/anime?page=${randomPageNum}`)
+  //Takes userList and a random page and generates a random anime
+  const GenerateAnime = (userList, pageList) => {
+    //map array anime id
+    const userIdList = [];
+    const pageIdList = [];
 
-		.then(res => res.json());
+    //TODO:REDO WAY OF DOING THIS...
+    //gets id of all anime that are on list
+    for (let i = 0; i < userList.length; i++) {
+      userIdList.push(userList[i].anime.mal_id);
+    } //for
 
-		SetRandomPage(tempPage.data)
+    //get all ids on page
+    for (let i = 0; i < pageList.length; i++) {
+      pageIdList.push(pageList[i].mal_id);
+    } //for
 
-		const temp = await fetch(`https://api.jikan.moe/v4/users/${query}/animelist`)
+    //gets the ids of all anime on page that are not in users list
 
-		.then(res => res.json())
+    let seenAnimeToDelete = new Set(unseenAnimeIdList);
+    let newAnimeToDelete = new Set(userIdList);
+    let newAnimeIdList = pageIdList.filter((name) => {
+      // return those elements not in the namesToDeleteSet
+      return !seenAnimeToDelete.has(name);
+    });
+    newAnimeIdList = pageIdList.filter((name) => {
+      // return those elements not in the namesToDeleteSet
+      return !newAnimeToDelete.has(name);
+    });
 
+    //gets a random anime
+    let randomElement =
+      newAnimeIdList[Math.floor(Math.random() * newAnimeIdList.length)];
 
-		SetUserList(temp.data);
-		delay(1000);
-		GenerateAnime(temp.data,tempPage.data);
+    let anime;
+    //grabs the random anime give random element
+    for (let i = 0; i < pageList.length; i++) {
+      if (pageList[i].mal_id === randomElement) {
+        anime = pageList[i];
+      } //if
+    } //for
 
-	}//FetchUser
+    //caches anime that have been generated
+    SetUnseenAnimeIdList((unseenIdAnimeList) => [
+      ...unseenIdAnimeList,
+      randomElement,
+    ]);
 
-	function delay(time) {
-		return new Promise(resolve => setTimeout(resolve, time));
-	  }
+    SetCurrentAnimeIndex(currentAnimeIndex + 1);
+    //stores generated anime
+    SetUnseenAnimeList((unseenIdAnimeList) => [...unseenIdAnimeList, anime]);
+    setRandomAnime(anime);
 
-	//Takes userList and a random page and generates a random anime
-	const GenerateAnime =  (userList,pageList) => {
-		//map array anime id
-		const userIdList = [];
-		const pageIdList = [];
-		
-		//TODO:REDO WAY OF DOING THIS...
-		//gets id of all anime that are on list
-		for(let i = 0; i < userList.length; i++) {
-			userIdList.push(userList[i].anime.mal_id);
-		}//for 
-
-		
-
-		//get all ids on page
-		for(let i = 0; i < pageList.length; i++) {
-			pageIdList.push(pageList[i].mal_id);
-		}//for 
-		console.log("pageListbefore",pageIdList);
-		
-		//gets the ids of all anime on page that are not in users list
-		console.log(userIdList.sort())
-		let seenAnimeToDelete = new Set(unseenAnimeList);
-		let newAnimeToDelete = new Set(userIdList);
-		let newAnimeIdList = pageIdList.filter((name) => {
-			// return those elements not in the namesToDeleteSet
-			return !seenAnimeToDelete.has(name);
-		  });
-		  newAnimeIdList = pageIdList.filter((name) => {
-			// return those elements not in the namesToDeleteSet
-			return !newAnimeToDelete.has(name);
-		  });
-
-		// let	newAnimeIdList = pageIdList.filter( ( el ) => userIdList.includes( el ) );
-		// // console.log(newAnimeIdList.sort());
-		//   newAnimeIdList = pageIdList.filter((el) => unseenAnimeList.includes(el));
-		 console.log(newAnimeIdList,"pageListafter")
-		 //gets a random anime
-		 let randomElement = newAnimeIdList[Math.floor(Math.random() * newAnimeIdList.length)];
-		 console.log(randomElement);
-		let anime;
-		for(let i=0;i < pageList.length;i++){
-			if(pageList[i].mal_id === randomElement){
-				 anime = pageList[i];
-			}
-		}
-		
-		 //caches anime that have been gernrated
-		 SetUnseenAnimeList(unseenAnimeList => [...unseenAnimeList,randomElement] );
-		 setRandomAnime(anime);
-		 
-		 
-	}
-	
+    console.log(currentAnimeIndex);
+  };
 
   return (
     <div className="App">
-		<Header 
-		topAnime={topAnime}
-		/>
-		<div>
-			
-				{/* <Sidebar 
-					topAnime={topAnime} /> */}
-					<MainContent
-					HandleSearch={HandleSearch}
-					user={user}
-					SetUser={SetUser}
-					animeList={animeList}
-					userList = {userList}
-					isSearching={isSearching}
-					randomAnime = {randomAnime} />
-					</div>
-     
+      <Header topAnime={topAnime} />
+      <div>
+        {/* <Sidebar topAnime={topAnime} /> */}
+        <MainContent
+          HandleSearch={HandleSearch}
+          HandlePrevPage={HandlePrevPage}
+          HandleNextPage={HandleNextPage}
+          user={user}
+          SetUser={SetUser}
+          animeList={animeList}
+          userList={userList}
+          isSearching={isSearching}
+          randomAnime={randomAnime}
+        />
+      </div>
     </div>
   );
 }
