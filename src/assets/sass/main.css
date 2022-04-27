@@ -27,6 +27,15 @@ header h1 strong {
   color: #4583C9;
 }
 
+.anime-card {
+  padding-right: 5%;
+  padding: left 5%;
+  border-radius: 12px;
+  padding-top: 2%;
+  text-align: center;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
 .inner-main {
   background-color: #282A36;
   padding-right: 15%;
@@ -39,6 +48,9 @@ header h1 strong {
   text-align: center;
   height: 100%;
   width: 100%;
+  background-color: #282A36;
+  position: absolute;
+  top: 20%;
   font-family: 'Fira Sans', sans-serif;
 }
 
