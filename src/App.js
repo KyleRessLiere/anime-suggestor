@@ -1,29 +1,41 @@
 import Header from "./components/Header";
-import Sidebar from "./components/Sidebar";
 import MainContent from "./components/MainContent";
 import { useState, useEffect } from "react";
 import * as React from "react";
+import "./assets/sass/main.css";
 
 function App() {
   const [animeList, SetAnimeList] = useState([]);
   const [topAnime, SetTopAnime] = useState([]);
   const [user, SetUser] = useState("");
   const [userList, SetUserList] = useState([]);
-  const [randomAnime, setRandomAnime] = useState([]);
+  const [randomAnime, SetRandomAnime] = useState([]);
   const [isSearching, SetSearchStatus] = useState(false);
   const [unseenAnimeIdList, SetUnseenAnimeIdList] = useState([]);
   const [unseenAnimeList, SetUnseenAnimeList] = useState([]);
   const [currentAnimeIndex, SetCurrentAnimeIndex] = useState(-1);
-  const [currentPage, SetCurrentPage] = useState([]);
 
   //Handlers
+  const HandleHome = () => {
+    SetSearchStatus(false);
+    SetUnseenAnimeIdList([]);
+    SetUnseenAnimeList([]);
+    SetCurrentAnimeIndex(-1);
+    SetRandomAnime([]);
+  };
+
+  useEffect(() => {
+    // FetchUser(user);
+    // delay(1000);
+    // SetCurrentAnimeIndex(currentAnimeIndex - 2);
+  }, []);
 
   //handles going to next page
   const HandlePrevPage = () => {
     let lastPageIndex = currentAnimeIndex - 1;
     if (lastPageIndex > -1) {
       console.log(unseenAnimeList[lastPageIndex]);
-      setRandomAnime(unseenAnimeList[lastPageIndex]);
+      SetRandomAnime(unseenAnimeList[lastPageIndex]);
       SetCurrentAnimeIndex(lastPageIndex);
     }
     //if there are any prev anime
@@ -33,10 +45,10 @@ function App() {
     //if there are any prev anime
     let nextAnimeIndex = currentAnimeIndex + 1;
     if (nextAnimeIndex < unseenAnimeList.length) {
-      setRandomAnime(unseenAnimeList[nextAnimeIndex]);
+      SetRandomAnime(unseenAnimeList[nextAnimeIndex]);
       SetCurrentAnimeIndex(nextAnimeIndex);
     } else {
-      HandleSearch();
+      FetchUser(user);
     }
   };
 
@@ -46,16 +58,12 @@ function App() {
       //STOPS PAGE FROM REFRESHING
       e.preventDefault();
     }
-
-    SetSearchStatus(true);
     // FetchPage();
     // delay(100);
     FetchUser(user);
-  }; //HandleSearch
 
-  useEffect(() => {
-    FetchTopAnime();
-  }, []);
+    SetSearchStatus(true);
+  }; //HandleSearch
 
   //fetches top anime on first page bypopularity
   const FetchTopAnime = async () => {
@@ -71,19 +79,11 @@ function App() {
       (res) => res.json()
     );
 
-    setRandomAnime(temp.data);
+    SetRandomAnime(temp.data);
   };
   //TODO:ADJUST FETCHING
   //TODO:FETCH PAGE SEPARATELY
-  const FetchPage = async function () {
-    let randomPageNum = Math.floor(Math.random() * 130) + 1;
-    const page = await fetch(
-      `https://api.jikan.moe/v4/top/anime?page=${randomPageNum}`
-    ).then(CheckError);
 
-    console.log(page.data);
-    SetCurrentPage(page.data);
-  };
   const FetchUser = async (query) => {
     let randomPageNum = Math.floor(Math.random() * 130) + 1;
     const tempPage = await fetch(
@@ -100,8 +100,9 @@ function App() {
 
         GenerateAnime(temp.data, tempPage.data);
       } catch (e) {
+        alert("Invalid Username");
         //catches if invalid username
-        GenerateAnime([], tempPage.data);
+        // GenerateAnime([], tempPage.data);
         //TODO:Add rendering for invalid user
       }
     } else {
@@ -111,13 +112,6 @@ function App() {
 
   function delay(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
-  }
-  function CheckError(response) {
-    if (response.status >= 200 && response.status <= 299) {
-      return response.json();
-    } else {
-      throw Error(response.statusText);
-    }
   }
 
   //Takes userList and a random page and generates a random anime
@@ -172,16 +166,18 @@ function App() {
     //stores generated anime
     SetUnseenAnimeList((unseenIdAnimeList) => [...unseenIdAnimeList, anime]);
     console.log(anime);
-    setRandomAnime(anime);
+    SetRandomAnime(anime);
 
     console.log(currentAnimeIndex);
+    console.log(unseenAnimeList);
   };
 
   return (
     <div className="App">
-      <Header topAnime={topAnime} />
       <div>
-        {/* <Sidebar topAnime={topAnime} /> */}
+        <div className="header">
+          <Header HandleHome={HandleHome} />
+        </div>
         <MainContent
           HandleSearch={HandleSearch}
           HandlePrevPage={HandlePrevPage}

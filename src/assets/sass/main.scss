@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Red+Hat+Display:900&display=swap');
+
 * {
 	margin: 0;
 	padding: 0;
@@ -13,13 +14,26 @@ html {
 	
 }
 
-header {
-	padding-top: 50px;
+.header {
+	float: left;
+	padding-top: 10px;
 	padding-bottom: 50px;
+	background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+	font-size: 36px;
+    outline:none;
+	strong {
+		color:#4583C9;
+		// color: #313131;
+	}
+
+	background-color: #313131;
 
 	h1 {
 		color: white;
-		font-size: 36px;
+		
 		font-weight: 400;
 		text-align: center;
 
@@ -29,36 +43,33 @@ header {
 		}
 	}
 }
-.anime-card{
-	padding-right: 5%;
-	padding: left 5%;
-    border-radius: 12px; 
-    padding-top: 2%;
-   text-align: center;
-   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-
-}
 
 
-	.inner-main{
-	
-  background-color: #282A36;
-  padding-right: 15%;
-  padding-left: 15%;
-  
-  /* Center horizontally*/
- 
+	.iframe{
+		background-color: #282A36;
+		width: 100%;
 	}
 	.main{
 		color: white;
 		text-align: center;
 		height: 100%;
 		width: 100%;
+	
 		background-color: #282A36;
 		position: absolute;
-		top:20%;
+		top:10%;
 		font-family: 'Fira Sans', sans-serif;
-		
+		p{
+			text-align: left;
+			padding-right: 20px;
+			padding-left: 20px;
+			font-size: 20px;
+		}
+		h2{
+			text-align: left;
+			padding-left: 20px;
+			font-size: 18px;
+		}
 		
 	}
 .btn-right{

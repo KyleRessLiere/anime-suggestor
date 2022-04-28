@@ -1,11 +1,11 @@
-import React from 'react'
+import React from "react";
 
-function Header() {
+function Header(props) {
   return (
-    <header>
-        <h1>The<strong>Anime</strong>Generator</h1>
-    </header>
-  )
+    <button onClick={props.HandleHome} className="header">
+      The<strong>Anime</strong>Generator
+    </button>
+  );
 }
 
-export default Header
+export default Header;

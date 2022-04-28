@@ -17,7 +17,9 @@ function MainContent(props) {
       </div>
     );
   } else {
-    return <Homepage HandleSearch={props.HandleSearch} />;
+    return (
+      <Homepage HandleSearch={props.HandleSearch} SetUser={props.SetUser} />
+    );
   }
 }
 

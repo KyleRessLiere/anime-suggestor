@@ -11,36 +11,36 @@ html {
   background-color: #313131;
 }
 
-header {
-  padding-top: 50px;
+.header {
+  float: left;
+  padding-top: 10px;
   padding-bottom: 50px;
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  font-size: 36px;
+  outline: none;
+  background-color: #313131;
 }
 
-header h1 {
+.header strong {
+  color: #4583C9;
+}
+
+.header h1 {
   color: white;
-  font-size: 36px;
   font-weight: 400;
   text-align: center;
 }
 
-header h1 strong {
+.header h1 strong {
   color: #4583C9;
 }
 
-.anime-card {
-  padding-right: 5%;
-  padding: left 5%;
-  border-radius: 12px;
-  padding-top: 2%;
-  text-align: center;
-  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-}
-
-.inner-main {
+.iframe {
   background-color: #282A36;
-  padding-right: 15%;
-  padding-left: 15%;
-  /* Center horizontally*/
+  width: 100%;
 }
 
 .main {
@@ -50,8 +50,21 @@ header h1 strong {
   width: 100%;
   background-color: #282A36;
   position: absolute;
-  top: 20%;
+  top: 10%;
   font-family: 'Fira Sans', sans-serif;
+}
+
+.main p {
+  text-align: left;
+  padding-right: 20px;
+  padding-left: 20px;
+  font-size: 20px;
+}
+
+.main h2 {
+  text-align: left;
+  padding-left: 20px;
+  font-size: 18px;
 }
 
 .btn-right {
