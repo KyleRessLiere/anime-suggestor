@@ -1,6 +1,7 @@
 import React from 'react'
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { LinkContainer } from 'react-router-bootstrap';
 import "./css/AnimeForm.css";
 
 
@@ -13,9 +14,11 @@ function AnimeForm() {
         We do not store and account details we only search for your list
       </Form.Text>
       <Form.Check type="checkbox" className="p-1" />
+      <LinkContainer to="anime">
       <Button variant="primary" type="submit">
       Submit
     </Button>
+    </LinkContainer>
     </Form.Group>
     
   </Form>

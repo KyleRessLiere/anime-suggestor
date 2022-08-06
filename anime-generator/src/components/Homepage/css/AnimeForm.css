@@ -5,17 +5,18 @@
     border-radius: 25px;
     
 }
-.anime-form{
 
-}
 .form-control{
     background-color: #1F1F1F;
     border: none;
     width: 200px;
     max-width: inherit;
+    color: #FFFFFF;
 }
+
 .form-control:focus{
     background-color: #1F1F1F;
+    color: white;
 }
 .html{
     background-color: #121212;
