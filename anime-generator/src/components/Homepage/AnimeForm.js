@@ -7,7 +7,6 @@ import "./css/AnimeForm.css";
 
 function AnimeForm() {
   const [randomAnime, SetRandomAnime] = useState([]);
-  const [topAnime, SetTopAnime] = useState([]);
   const generateAnime = async () => {
     const temp = await fetch("https://api.jikan.moe/v4/random/anime").then(
       (res) => res.json()
